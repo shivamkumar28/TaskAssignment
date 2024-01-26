@@ -32,7 +32,7 @@ export const styles = StyleSheet.create({
         marginBottom: 16
     },
     name: {
-        fontSize: 22,
+        fontSize: 20,
         fontWeight: '700',
         color: Colors.black
     },
@@ -42,7 +42,7 @@ export const styles = StyleSheet.create({
         color: Colors.black
     },
     location: {
-        fontSize: 18,
+        fontSize: 16,
         color: Colors.black
     },
     subDetails: {

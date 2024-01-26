@@ -14,7 +14,6 @@ export const styles = StyleSheet.create({
     card: {
         flex: 1,
         borderRadius: 8,
-        overflow: 'hidden',
         backgroundColor: Colors.white,
         elevation: 10,
         shadowColor: Colors.black,
@@ -24,11 +23,14 @@ export const styles = StyleSheet.create({
     },
     imgView: {
         width: '100%',
-        height: 150
+        height: 150,
+        borderRadius: 8,
+        overflow: 'hidden'
     },
     fullView: {
         width: '100%',
-        height: '100%'
+        height: '100%',
+        borderRadius: 8,
     },
     detailView: {
         flex: 1,
