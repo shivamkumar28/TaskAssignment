@@ -47,7 +47,7 @@ const Home = ({ navigation }: any) => {
      * @returns
      */
     const renderList = ({ item, index }: any) => {
-        return <TouchableOpacity key={index} style={styles.itemContainer} onPress={() => onCardPress(item.id)} activeOpacity={0.6}>
+        return <TouchableOpacity key={index} style={styles.itemContainer} onPress={() => onCardPress(item.id)} activeOpacity={0.7}>
             <View style={styles.card}>
                 <View style={styles.imgView}>
                     <Image source={{ uri: item.image }} style={styles.fullView} />
