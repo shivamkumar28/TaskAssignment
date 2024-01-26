@@ -16,19 +16,36 @@ const Home = ({ navigation }: any) => {
         getCharaterList()
     }, [])
 
+
+    /**
+     * Call api to fetch charater list
+     */
     const getCharaterList = () => {
         getCharater().then((res: any) => {
-            disptach(updateCharaterList(res.results))
+            if (!!res && !!res?.results) {
+                disptach(updateCharaterList(res?.results))
+            } else {
+                showToast("Something Went Wrong")
+            }
         }).catch((e: any) => {
             console.log('error-', e)
             showToast(e?.message || "Something Went Wrong")
         })
     }
 
+    /**
+     * It will redirect to detail screen
+     * @param id;
+     */
     const onCardPress = (id: number) => {
         navigation.navigate(Screens.details, { characterId: id })
     }
 
+    /**
+     * render charater list
+     * @param {item,index}
+     * @returns
+     */
     const renderList = ({ item, index }: any) => {
         return <TouchableOpacity key={index} style={styles.itemContainer} onPress={() => onCardPress(item.id)} activeOpacity={0.6}>
             <View style={styles.card}>

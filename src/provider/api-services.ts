@@ -1,6 +1,10 @@
 import API, { ApiMethodType } from './api-config';
 import { BASE_URL, EndPoints } from "../constant/api-endpoints";
 
+/**
+ * get Character List
+ * @returns Api Response
+ */
 export const getCharater = async () => {
     return new Promise(async (resolve, reject) => {
         const res = await API.request<any, any>(
@@ -8,14 +12,18 @@ export const getCharater = async () => {
             ApiMethodType.get,
             {}
         );
-        // console.log('Charater-RES--', JSON.stringify(res));
         if (res.code == 200) {
             resolve(res.data);
         }
-        resolve(null);
+        resolve({});
     });
 };
 
+/**
+ * get character details by id
+ * @param id
+ * @returns Api Response
+ */
 export const getCharaterId = async (id: number) => {
     return new Promise(async (resolve, reject) => {
         const res = await API.request<any, any>(
@@ -26,6 +34,6 @@ export const getCharaterId = async (id: number) => {
         if (res.code == 200) {
             resolve(res.data);
         }
-        resolve(null);
+        resolve({});
     });
 };

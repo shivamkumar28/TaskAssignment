@@ -21,31 +21,44 @@ const Details = ({ route }: any) => {
         }
     }, [])
 
+    /**
+     * Call api for fetch charater detail by id
+     * @param id
+     */
     const getCharaterList = (id: number) => {
         getCharaterId(id).then((res: any) => {
             disptach(updateCharaterDetails(res))
+            Object.values(res).length == 0 && showToast("Something Went Wrong")
         }).catch((e: any) => {
             console.log('err--', e)
             showToast(e?.message || "Something Went Wrong")
         })
     }
 
+    /**
+     * Render Image View
+     * @returns ReactNode
+     */
     const imageView = () => {
         return <View style={styles.imgView}>
             <Image source={{ uri: charaterDetail?.image }} style={styles.fullView} />
         </View>
     }
 
+    /**
+     * render Charater details
+     * @returns ReactNode
+     */
     const detailView = () => {
         return <View style={styles.details}>
             <View style={styles.nameView}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                     <View style={{ flexDirection: 'row', }}>
-                        <Text style={styles.name}>{charaterDetail.name}</Text>
+                        <Text style={styles.name}>{charaterDetail?.name || ''}</Text>
                     </View>
-                    <Text style={styles.gender}>{charaterDetail.gender}</Text>
+                    <Text style={styles.gender}>{charaterDetail?.gender || ''}</Text>
                 </View>
-                <Text style={styles.location}>{charaterDetail?.location?.name}</Text>
+                <Text style={styles.location}>{charaterDetail?.location?.name || ''}</Text>
             </View>
             <View style={styles.subDetails}>
                 <View style={{ flexDirection: 'row', marginBottom: 16 }}>
@@ -53,18 +66,18 @@ const Details = ({ route }: any) => {
                         <Text style={styles.label}>{'Status:'}</Text>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                             <View style={styles.status}>
-                                <View style={{ ...styles.green, backgroundColor: charaterDetail.status == "Alive" ? Colors.green : Colors.grey }}></View>
-                                <Text style={styles.value}>{`${charaterDetail.status} - ${charaterDetail.species}`}</Text>
+                                <View style={{ ...styles.green, backgroundColor: charaterDetail?.status == "Alive" ? Colors.green : Colors.grey }}></View>
+                                <Text style={styles.value}>{`${charaterDetail?.status || ''} - ${charaterDetail?.species || ''}`}</Text>
                             </View>
                         </View>
                     </View>
                     <View style={{ flex: 1 }}>
                         <Text style={styles.label}>{'Episodes:'}</Text>
-                        <Text style={styles.value}>{charaterDetail?.episode?.length}</Text>
+                        <Text style={styles.value}>{charaterDetail?.episode?.length || 0}</Text>
                     </View>
                 </View>
                 <Text style={styles.label}>{'Created Date:'}</Text>
-                <Text style={styles.value}>{moment(charaterDetail.created).format('YYYY-MM-DD')}</Text>
+                <Text style={styles.value}>{!!charaterDetail?.created ? moment(charaterDetail?.created).format('YYYY-MM-DD') : ''}</Text>
             </View>
         </View>
     }
