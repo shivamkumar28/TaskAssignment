@@ -1,37 +1,11 @@
 import { FlatList, Image, Text, TouchableOpacity, View } from "react-native"
 import { styles } from "./style"
 import { Colors, Screens } from "../../constant"
-import { useEffect } from "react"
-import { getCharater } from "../../provider/api-services"
-import { useDispatch, useSelector } from "react-redux"
-import { updateCharaterList } from "../../redux/general.slice"
-import { showToast } from "../../utilities"
 import { Loader } from "../../components"
+import { useGetAllCharacter } from "../../utilities/getAllCharacterQuery"
 
 const Home = ({ navigation }: any) => {
-    const disptach = useDispatch()
-    const charaterList = useSelector((state: any) => state.general.charaterList)
-
-    useEffect(() => {
-        getCharaterList()
-    }, [])
-
-
-    /**
-     * Call api to fetch charater list
-     */
-    const getCharaterList = () => {
-        getCharater().then((res: any) => {
-            if (!!res && !!res?.results) {
-                disptach(updateCharaterList(res?.results))
-            } else {
-                showToast("Something Went Wrong")
-            }
-        }).catch((e: any) => {
-            console.log('error-', e)
-            showToast(e?.message || "Something Went Wrong")
-        })
-    }
+    const { isLoading, data } = useGetAllCharacter()
 
     /**
      * It will redirect to detail screen
@@ -65,14 +39,14 @@ const Home = ({ navigation }: any) => {
 
     return <View style={styles.container}>
         <FlatList
-            data={charaterList}
+            data={data}
             renderItem={renderList}
             keyExtractor={(item: any) => item?.id}
             numColumns={2}
             style={{ flex: 1, }}
             contentContainerStyle={{ paddingHorizontal: 4, paddingVertical: 4 }}
         />
-        {charaterList.length == 0 && <Loader size={"large"} color={Colors.black} />}
+        {isLoading && <Loader size={"large"} color={Colors.black} />}
     </View>
 }
 

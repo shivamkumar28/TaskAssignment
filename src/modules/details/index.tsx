@@ -1,39 +1,12 @@
 import { Image, Text, View } from "react-native"
 import { styles } from "./style"
-import { useEffect } from "react"
 import { Colors } from "../../constant"
 import moment from "moment"
-import { getCharaterId } from "../../provider/api-services"
-import { useDispatch, useSelector } from "react-redux"
-import { updateCharaterDetails } from "../../redux/general.slice"
-import { showToast } from "../../utilities"
 import { Loader } from "../../components"
+import { useGetCharaterById } from "../../utilities/getAllCharacterQuery"
 
 const Details = ({ route }: any) => {
-    const disptach = useDispatch()
-    const charaterDetail = useSelector((state: any) => state.general.charaterDetail)
-
-    useEffect(() => {
-        const characterId = route.params.characterId
-        getCharaterList(characterId)
-        return () => {
-            disptach(updateCharaterDetails({}))
-        }
-    }, [])
-
-    /**
-     * Call api for fetch charater detail by id
-     * @param id
-     */
-    const getCharaterList = (id: number) => {
-        getCharaterId(id).then((res: any) => {
-            disptach(updateCharaterDetails(res))
-            Object.values(res).length == 0 && showToast("Something Went Wrong")
-        }).catch((e: any) => {
-            console.log('err--', e)
-            showToast(e?.message || "Something Went Wrong")
-        })
-    }
+    const { data, isLoading } = useGetCharaterById(route?.params?.characterId)
 
     /**
      * Render Image View
@@ -41,7 +14,7 @@ const Details = ({ route }: any) => {
      */
     const imageView = () => {
         return <View style={styles.imgView}>
-            <Image source={{ uri: charaterDetail?.image }} style={styles.fullView} />
+            <Image source={{ uri: data?.image }} style={styles.fullView} />
         </View>
     }
 
@@ -54,11 +27,11 @@ const Details = ({ route }: any) => {
             <View style={styles.nameView}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                     <View style={{ flexDirection: 'row', }}>
-                        <Text style={styles.name}>{charaterDetail?.name || ''}</Text>
+                        <Text style={styles.name}>{data?.name || ''}</Text>
                     </View>
-                    <Text style={styles.gender}>{charaterDetail?.gender || ''}</Text>
+                    <Text style={styles.gender}>{data?.gender || ''}</Text>
                 </View>
-                <Text style={styles.location}>{charaterDetail?.location?.name || ''}</Text>
+                <Text style={styles.location}>{data?.location?.name || ''}</Text>
             </View>
             <View style={styles.subDetails}>
                 <View style={{ flexDirection: 'row', marginBottom: 16 }}>
@@ -66,18 +39,18 @@ const Details = ({ route }: any) => {
                         <Text style={styles.label}>{'Status:'}</Text>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                             <View style={styles.status}>
-                                <View style={{ ...styles.green, backgroundColor: charaterDetail?.status == "Alive" ? Colors.green : Colors.grey }}></View>
-                                <Text style={styles.value}>{`${charaterDetail?.status || ''} - ${charaterDetail?.species || ''}`}</Text>
+                                <View style={{ ...styles.green, backgroundColor: data?.status == "Alive" ? Colors.green : Colors.grey }}></View>
+                                <Text style={styles.value}>{`${data?.status || ''} - ${data?.species || ''}`}</Text>
                             </View>
                         </View>
                     </View>
                     <View style={{ flex: 1 }}>
                         <Text style={styles.label}>{'Episodes:'}</Text>
-                        <Text style={styles.value}>{charaterDetail?.episode?.length || 0}</Text>
+                        <Text style={styles.value}>{data?.episode?.length || 0}</Text>
                     </View>
                 </View>
                 <Text style={styles.label}>{'Created Date:'}</Text>
-                <Text style={styles.value}>{!!charaterDetail?.created ? moment(charaterDetail?.created).format('YYYY-MM-DD') : ''}</Text>
+                <Text style={styles.value}>{!!data?.created ? moment(data?.created).format('YYYY-MM-DD') : ''}</Text>
             </View>
         </View>
     }
@@ -85,7 +58,7 @@ const Details = ({ route }: any) => {
     return <View style={styles.container}>
         {imageView()}
         {detailView()}
-        {Object.values(charaterDetail).length == 0 && <Loader size={"large"} color={Colors.black} />}
+        {isLoading && <Loader size={"large"} color={Colors.black} />}
     </View>
 }
 
